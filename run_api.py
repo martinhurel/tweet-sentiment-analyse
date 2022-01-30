@@ -6,6 +6,12 @@ import pandas as pd
 
 app = Flask(__name__)
 
+vocab_size = 10000
+max_length = 100
+trunc_type='post'
+padding_type='post'
+oov_tok = "<OOV>"
+
 df = pd.read_csv('Tweets.csv')
 
 #Suppression des doublons
