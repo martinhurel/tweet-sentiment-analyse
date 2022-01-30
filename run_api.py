@@ -1,7 +1,44 @@
 from flask import Flask, render_template, request
 from tensorflow import keras
+from tensorflow.keras.preprocessing.text import Tokenizer
+import re
+import pandas as pd
 
 app = Flask(__name__)
+
+df = pd.read_csv('Tweets.csv')
+
+#Suppression des doublons
+df = df.drop_duplicates('tweet_id')
+
+# Remove neutral rows
+df = df.drop(df[df.airline_sentiment == 'neutral' ].index)
+
+# Cleaning data set
+def remove_useless_words_in_text(txt):
+    mentions = re.findall("@([a-zA-Z0-9_]{1,50})", txt)
+    for mention in mentions:
+        txt = txt.replace(mention, '')
+    txt = txt.replace('@', '')
+    return txt
+
+df['text'] = df['text'].transform(remove_useless_words_in_text)
+    
+sentences = [] # headlines
+labels = [] # labels 
+training_size = 1200
+for idx,row in df.iterrows():
+    if row['airline_sentiment_confidence'] > 0.7:
+        sentences.append(row['text'])
+        if row['airline_sentiment'] == 'positive':
+            labels.append(1)
+        elif row['airline_sentiment'] == 'negative':
+            labels.append(0)
+
+training_sentences = sentences[0:training_size]
+
+tokenizer = Tokenizer(num_words = 100, oov_token="<OOV>")
+tokenizer.fit_on_texts(training_sentences)
 
 
 class Analyse:
@@ -27,6 +64,8 @@ def home():
 def post_search():
 
     model = keras.models.load_model('/Users/hurelmartin/Git-Repo/tweet-sentiment-analyse/price_prediction_model.h5')
+
+
 
 
     phrase = request.form.get('phrase')
