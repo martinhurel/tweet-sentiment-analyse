@@ -70,6 +70,19 @@ def post_search():
 
     phrase = request.form.get('phrase')
 
+
+    new_sequences = tokenizer.texts_to_sequences(new_sentence)
+    # padding the new sequences to make them have same dimensions
+    new_padded = pad_sequences(new_sequences, maxlen = max_length,
+
+                            padding = padding_type,
+                            truncating = trunc_type)
+
+    new_padded = np.array(new_padded)
+
+    print(model.predict(new_padded))
+
+
     prediction = model.predict(phrase)
 
     print(prediction)
