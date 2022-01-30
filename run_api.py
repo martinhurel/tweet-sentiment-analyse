@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from tensorflow import keras
 from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 import pandas as pd
 
