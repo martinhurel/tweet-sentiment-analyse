@@ -4,6 +4,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -49,17 +50,9 @@ tokenizer.fit_on_texts(training_sentences)
 
 
 class Analyse:
-    def __init__(self, name, title, text, img_link, img_link_1, img_link_2, img_link_3, img_link_4, link_wikipedia, link_video):
-        self.name = name
-        self.title = title
-        self.text = text
-        self.img_link = img_link
-        self.img_link_1 = img_link_1
-        self.img_link_2 = img_link_2
-        self.img_link_3 = img_link_3
-        self.img_link_4 = img_link_4
-        self.link_wikipedia = link_wikipedia
-        self.link_video = link_video
+    def __init__(self, phrase, prediction):
+        self.prediction = prediction
+        self.phrase = phrase
 
 
 @app.route('/', methods=['GET'])
@@ -70,15 +63,12 @@ def home():
 @app.route('/', methods=['POST'])
 def post_search():
 
-    model = keras.models.load_model('/Users/hurelmartin/Git-Repo/tweet-sentiment-analyse/price_prediction_model.h5')
-
-
-
+    model = keras.models.load_model('/Users/martinhurel/Desktop/tweet-sentiment-analyse/price_prediction_model.h5')
 
     phrase = request.form.get('phrase')
 
 
-    new_sequences = tokenizer.texts_to_sequences(new_sentence)
+    new_sequences = tokenizer.texts_to_sequences([phrase])
     # padding the new sequences to make them have same dimensions
     new_padded = pad_sequences(new_sequences, maxlen = max_length,
 
@@ -87,12 +77,11 @@ def post_search():
 
     new_padded = np.array(new_padded)
 
-    print(model.predict(new_padded))
+    prediction = model.predict(new_padded)
+
+    prediction = "{:.0%}".format(prediction[0][0])
 
 
-    prediction = model.predict(phrase)
-
-    print(prediction)
     
 
     # if(predict == 0):
@@ -114,7 +103,7 @@ def post_search():
     #     values = Star("Hypergiant", "Hypergiant en français", "Une hypergéante jaune est une étoile massive à l'atmosphère étendue et de classe spectrale variant de la fin de la classe A jusqu'au début de la classe K sur le diagramme Hertzsprung-Russell (HR). Sa masse initiale équivaut à 20 à 50 masses solaires, mais à ce stade, elle a pu perdre jusqu'à la moitié de cette masse2. Jusqu'ici, seule une poignée d'entre elles sont répertoriées dans notre galaxie.Parfois appelées hypergéantes froides en comparaison avec les étoiles faisant partie des classes O et B, et parfois hypergéantes tièdes en comparaison avec les supergéantes rouges3,4, les hypergéantes jaunes comptent parmi les étoiles les plus lumineuses jamais observées, avec une magnitude absolue (MV) se situant aux environs de -9. Elles sont aussi parmi les étoiles les plus volumineuses5 et les plus rares.",
     #                   "http://cdn.eso.org/images/screen/eso1409b.jpg", "https://images.theconversation.com/files/106259/original/image-20151216-25600-tbnhyq.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1356&h=668&fit=crop", "https://media1.s-nbcnews.com/j/MSNBC/Components/Photo/_new/120123-space-sun-10a.fit-760w.jpg", "https://cdn.pixabay.com/photo/2017/07/25/19/27/star-2539245_960_720.jpg", "https://cdn.pixabay.com/photo/2017/08/05/18/24/star-2584986_960_720.jpg", "https://en.wikipedia.org/wiki/Hypergiant", "bWYuch-s61A")
 
-    # return render_template('stars.html', prediction=values)
+    return render_template('view.html', prediction=Analyse(phrase, prediction))
 
 
 if __name__ == '__main__':

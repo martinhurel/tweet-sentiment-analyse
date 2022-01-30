@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include 'head.html' %}
+
+<body class="stars-page">
+    <a href="{{ url_for('home') }}" class="back"><span class="material-icons">arrow_back</span>Retour</a>
+    <h1>Votre prédiction pour la phrase "{{prediction.phrase}}" est:</h1>
+    <h2>{{prediction.prediction}} heureuse</h2>
+</body>
+
+</html>
