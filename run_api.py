@@ -53,9 +53,8 @@ tokenizer.fit_on_texts(training_sentences)
 
 
 class Analyse:
-    def __init__(self, phrase, prediction):
-        self.prediction = prediction
-        self.phrase = phrase
+    def __init__(self, data):
+        self.data = data
 
 
 @app.route('/', methods=['GET'])
@@ -70,8 +69,10 @@ def post_search():
 
     df_tweets = get_dataframe(company_id)
 
+    mean_note = df_tweets['sentiment'].mean()
 
-    return render_template('view.html', prediction=Analyse(df_tweets))
+
+    return render_template('view.html', prediction=Analyse([mean_note, company_id]))
 
 def get_sentiment_analyse(sentence):
     model = keras.models.load_model('/Users/martinhurel/Desktop/tweet-sentiment-analyse/price_prediction_model.h5')

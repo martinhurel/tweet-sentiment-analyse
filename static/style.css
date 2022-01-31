@@ -52,6 +52,7 @@ h1 {
   font-size: 2.5rem;
   text-transform: uppercase;
   margin-left: 5%;
+  color: #3e5190;
 }
 
 h2 {
@@ -85,7 +86,7 @@ background-position: center;
   width: 100%;
   font-size: 0.7rem;
   margin-top: 5%;
-  margin-bottom: 5%;
+  margin-bottom: 2%;
 }
 
 div.search-bar {

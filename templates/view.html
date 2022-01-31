@@ -4,8 +4,8 @@
 
 <body class="stars-page">
     <a href="{{ url_for('home') }}" class="back"><span class="material-icons">arrow_back</span>Retour</a>
-    <h1>Votre prédiction pour la phrase "{{prediction.phrase}}" est:</h1>
-    <h2>{{prediction.prediction}} heureuse</h2>
+    <h2>{{prediction.prediction[0]}}</h2>
+    <h2>Note moyenne: "{{prediction.data[1]}}" est:</h2>
 </body>
 
 </html>
