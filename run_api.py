@@ -69,10 +69,11 @@ def post_search():
 
     df_tweets = get_dataframe(company_id)
 
-    mean_note = df_tweets['sentiment'].mean()
+    mean_note = df_tweets['Sentiment'].mean()
 
+    mean_note = "{:.0%}".format(mean_note)
 
-    return render_template('view.html', prediction=Analyse([mean_note, company_id, len(df)]))
+    return render_template('view.html', prediction=Analyse([mean_note, company_id, len(df_tweets)]))
 
 def get_sentiment_analyse(sentence):
     model = keras.models.load_model('/Users/martinhurel/Desktop/tweet-sentiment-analyse/price_prediction_model.h5')
@@ -86,11 +87,9 @@ def get_sentiment_analyse(sentence):
 
     new_padded = np.array(new_padded)
 
-    prediction = model.predict(new_padded)
+    val_analyse = model.predict(new_padded)
 
-    prediction = "{:.0%}".format(prediction[0][0])
-
-    return prediction
+    return val_analyse
 
 def get_dataframe(company_id):
 
@@ -116,7 +115,7 @@ def get_dataframe(company_id):
     for val in data['data']:
         df = df.append({
             'Tweet': val['text'],
-            'Sentiment': get_sentiment_analyse(val['text']),
+            'Sentiment': get_sentiment_analyse(val['text'])[0][0],
         }, ignore_index=True)
 
     return df

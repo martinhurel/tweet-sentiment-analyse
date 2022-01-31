@@ -4,9 +4,9 @@
 
 <body class="stars-page">
     <a href="{{ url_for('home') }}" class="back"><span class="material-icons">arrow_back</span>Retour</a>
-    <h2>{{prediction.prediction[0]}}</h2>
-    <h2>Nous avons récupérer {{prediction.prediction[3]}} tweets</h2>
-    <h2>Note moyenne: "{{prediction.data[1]}}" est:</h2>
+    <h2>Id: {{prediction.data[1]}}</h2>
+    <h2>Nous avons récupérer {{prediction.data[2]}} tweets</h2>
+    <h2>Note moyenne: positif: {{prediction.data[0]}}" </h2>
 </body>
 
 </html>
