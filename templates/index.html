@@ -3,19 +3,29 @@
 {% include 'head.html' %}
 
 <body>
+    <h1>Tweet Analyse</h1>
     <section class="container">
-        <h1>Tweet Analyse</h1>
+        <div class="left-cont">
+            <img src="static/img3.png" alt="">
+        </div>
+        <div class="right-cont">
+            <p class="description">THE NEW PLATFORM TO TEST A BRAND</p>
+            <h2>Search brand popularity with a simple click</h2>
+            <p class="subdescription">Tweet analyse is a service that allow to check the appreciation rate of a brand with his customer.</p>
+        </div>
+    </section>
+    <section class="container-2">
+        <div class="container-sub-2">
+            <p class="description">LET'S START</p>
+            <h2>Enter a company name to start </h2>
+            <p class="subdescription">More than 50 millions companies referenced.</p>
+        </div>
         <div class="search-bar">
             <form method="POST">
-                <input type="text" name="phrase" placeholder="Enter a phrase to see if is positive or negative" />
+                <input type="text" name="phrase" placeholder="Enter a company name" />
                 <input type="submit" value="Submit" />
             </form>
         </div>
-        <h2>Enter a phrase to see if it's a good or bad <span>review</span></h2>
-    </section>
-    <section class="background">
-        <div class="bg-1"></div>
-        <div class="bg-2"></div>
     </section>
     <p class="powered">Powered with <span>&#10084;&#65039;</span> by &#128056;'s team</p>
 </body>
