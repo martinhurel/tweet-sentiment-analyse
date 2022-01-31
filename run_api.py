@@ -14,6 +14,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import io
 from flask import Response
 from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 
 app = Flask(__name__)
@@ -38,6 +39,8 @@ def remove_useless_words_in_text(txt):
     for mention in mentions:
         txt = txt.replace(mention, '')
     txt = txt.replace('@', '')
+    txt = txt.replace('https', '')
+    txt = txt.replace('http', '')
     return txt
 
 df['text'] = df['text'].transform(remove_useless_words_in_text)
@@ -68,16 +71,39 @@ class Analyse:
 def home():
     return render_template('index.html')
 
+
 @app.route('/plot-sentiment-repartition.png')
-def plot_png():
+def plot_png(): 
+
+    plt.style.use('seaborn')
     df = pd.read_csv('df_tweets.csv')
     positif = len(df[df['Sentiment'] > 0.5])
     negatif = len(df[df['Sentiment'] < 0.5])
     fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    xs = ['positif', 'negatif']
-    axis.set_title('Tweet sentiment repartition')
-    axis.bar(xs, [positif, negatif])
+
+    text = ''
+    for idx,row in df.iterrows():
+        text = text + ' ' +  remove_useless_words_in_text(row['Tweet'])
+
+    # Create the wordcloud object
+    wordcloud = WordCloud(width=480, height=480, margin=0).generate(text)
+
+    fig = Figure(figsize=(14,4))
+    axis1 = fig.add_subplot(1, 3, 1)
+    axis2 = fig.add_subplot(1, 3, 2)
+    axis3 = fig.add_subplot(1, 3, 3)
+
+    axis1.set_title('Tweet sentiment repartition')
+    axis1.bar(['positif', 'negatif'], [positif, negatif], color = ['green', 'red'])
+    
+    axis2.imshow(wordcloud, interpolation='bilinear')
+    axis2.axis('off')
+    axis2.set_title('Word Cloud')
+    
+    axis3.boxplot(df['Sentiment'])
+    axis3.set_title('Sentiment distribution')
+    axis3.set_xticklabels(['Sentiment'])
+
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
@@ -106,10 +132,7 @@ def get_sentiment_analyse(sentence):
 
     new_sequences = tokenizer.texts_to_sequences([sentence])
     # padding the new sequences to make them have same dimensions
-    new_padded = pad_sequences(new_sequences, maxlen = max_length,
-
-                            padding = padding_type,
-                            truncating = trunc_type)
+    new_padded = pad_sequences(new_sequences, maxlen = max_length,padding = padding_type,truncating = trunc_type)
 
     new_padded = np.array(new_padded)
 
@@ -134,8 +157,6 @@ def get_dataframe(company_id):
     response = requests.get('https://api.twitter.com/2/users/'+ company_id +'/mentions', headers=headers, params=params)
 
     data = json.loads(response.text)
-
-    print(data)
 
     df = pd.DataFrame(columns = ['Tweet', 'Sentiment'])
 

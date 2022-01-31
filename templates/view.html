@@ -7,19 +7,20 @@
 <body class="stars-page">
     <a href="{{ url_for('home') }}" class="back"><span class="material-icons">arrow_back</span>Retour</a>
     <h2 class="first-sub-title"><span class="text-orange">RESUMÉ</span>
-    <h2><u>Tweet Id de l'entreprise:</u> {{prediction.data[1]}}</h2>
-    <h2><u>Nous avons récupérer: </u>{{prediction.data[2]}} tweets</h2>
-    <h2><u>Note moyenne positif:</u>{{prediction.data[0]}} </h2>
-    <hr class="text-orange">
-    <h2><span class="text-orange">TWEET</span></h2>
-    <div class="tweet-container">
-        {% for row in prediction.data[3] %}
-        <p class="text-tweet-get">{{row}}</p>
-        {% endfor %}
-    </div>
-    <hr class="text-orange">
-    <h2 class="first-sub-title"><span class="text-orange">GRAPHIQUE</span>
-    <img src="/plot-sentiment-repartition.png" alt="my plot">
+        <h2><u>Tweet Id de l'entreprise:</u> {{prediction.data[1]}}</h2>
+        <h2><u>Nous avons récupérer:</u> {{prediction.data[2]}} tweets</h2>
+        <h2><u>Note moyenne positif:</u> {{prediction.data[0]}} </h2>
+        <hr class="text-orange">
+        <h2><span class="text-orange">TWEET</span></h2>
+        <div class="tweet-container">
+            {% for row in prediction.data[3] %}
+            <p class="text-tweet-get">{{row}}</p>
+            {% endfor %}
+        </div>
+        <hr class="text-orange">
+        <h2 class="first-sub-title"><span class="text-orange">GRAPHIQUE</span></h2>
+        <img src="/plot-sentiment-repartition.png" alt="my plot">
+        <p class="powered">Powered with <span>&#10084;&#65039;</span> by &#128056;'s team</p>
 </body>
 
 </html>
