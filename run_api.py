@@ -13,6 +13,8 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import io
 from flask import Response
+from wordcloud import WordCloud
+
 
 app = Flask(__name__)
 
@@ -68,21 +70,17 @@ def home():
 
 @app.route('/plot.png')
 def plot_png():
-    fig = create_figure()
+    df = pd.read_csv('df_tweets.csv')
+    positif = len(df[df['Sentiment'] > 0.5])
+    negatif = len(df[df['Sentiment'] < 0.5])
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    xs = ['positif', 'negatif']
+    axis.set_title('Tweet sentiment repartition')
+    axis.bar(xs, [positif, negatif])
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
-
-def create_figure():
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    xs = range(100)
-    ys = [random.randint(1, 50) for x in xs]
-    axis.set_xlabel('time (s)')
-    axis.set_title('subplot 2')
-    axis.set_ylabel('Undamped')
-    axis.plot(xs, ys)
-    return fig
 
 @app.route('/', methods=['POST'])
 def post_search():
@@ -91,11 +89,17 @@ def post_search():
 
     df_tweets = get_dataframe(company_id)
 
+    df_tweets = df_tweets[df_tweets['Langue'] == 'en']
+
     mean_note = df_tweets['Sentiment'].mean()
 
     mean_note = "{:.0%}".format(mean_note)
 
-    return render_template('view.html', prediction=Analyse([mean_note, company_id, len(df_tweets)]))
+    text_tweet = df_tweets['Tweet']
+
+    df_tweets.to_csv('df_tweets.csv')
+
+    return render_template('view.html', prediction=Analyse([mean_note, company_id, len(df_tweets),text_tweet]))
 
 def get_sentiment_analyse(sentence):
     model = keras.models.load_model('/Users/martinhurel/Desktop/tweet-sentiment-analyse/price_prediction_model.h5')
@@ -122,20 +126,22 @@ def get_dataframe(company_id):
     }
 
     params = (
-        ('exclude', 'replies,retweets'),
         ('start_time', '2022-01-01T00:00:00.000Z'),
         ('end_time', '2022-01-31T00:00:00.000Z'),
-        ('tweet.fields', 'text'),
+        ('tweet.fields', 'text,lang'),
     )
 
-    response = requests.get('https://api.twitter.com/2/users/'+ company_id +'/tweets', headers=headers, params=params)
+    response = requests.get('https://api.twitter.com/2/users/'+ company_id +'/mentions', headers=headers, params=params)
 
     data = json.loads(response.text)
+
+    print(data)
 
     df = pd.DataFrame(columns = ['Tweet', 'Sentiment'])
 
     for val in data['data']:
         df = df.append({
+            'Langue': val['lang'],
             'Tweet': val['text'],
             'Sentiment': get_sentiment_analyse(val['text'])[0][0],
         }, ignore_index=True)

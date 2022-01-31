@@ -31,6 +31,10 @@ section.container {
   border-top: 2px solid #fb501e;
 }
 
+p.text-tweet-get {
+  font-size: 15px !important;
+}
+
 .stars-page h2 {
   margin: 25px 0;
   font-size: 25px !important;

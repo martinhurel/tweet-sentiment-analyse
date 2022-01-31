@@ -11,6 +11,13 @@
     <h2><span class="text-orange">Nous avons récupérer: </span>{{prediction.data[2]}} tweets</h2>
     <h2><span class="text-orange">Note moyenne positif: </span>{{prediction.data[0]}} </h2>
     <hr class="text-orange">
+    <h2><span class="text-orange">TWEET</span></h2>
+    <div class="tweet-container">
+        {% for row in prediction.data[3] %}
+        <p class="text-tweet-get">{{row}}</p>
+        {% endfor %}
+    </div>
+    <hr class="text-orange">
     <img src="/plot.png" alt="my plot">
 </body>
 
