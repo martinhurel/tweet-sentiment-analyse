@@ -8,6 +8,11 @@ import numpy as np
 import os
 import requests
 import json
+import random
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import io
+from flask import Response
 
 app = Flask(__name__)
 
@@ -61,6 +66,23 @@ class Analyse:
 def home():
     return render_template('index.html')
 
+@app.route('/plot.png')
+def plot_png():
+    fig = create_figure()
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+def create_figure():
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    xs = range(100)
+    ys = [random.randint(1, 50) for x in xs]
+    axis.set_xlabel('time (s)')
+    axis.set_title('subplot 2')
+    axis.set_ylabel('Undamped')
+    axis.plot(xs, ys)
+    return fig
 
 @app.route('/', methods=['POST'])
 def post_search():

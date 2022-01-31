@@ -16,6 +16,26 @@ section.container {
   margin-bottom: 10%;
 }
 
+.text-orange {
+  color: #fb501e;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.first-sub-title {
+  margin-top: 5% !important;
+}
+
+.stars-page hr {
+  margin-top: 5%;
+  border-top: 2px solid #fb501e;
+}
+
+.stars-page h2 {
+  margin: 25px 0;
+  font-size: 25px !important;
+}
+
 section.container img {
   width: 80%;
 }
@@ -67,9 +87,9 @@ h2 {
 
 /* 
 .container p {
-  font-size: 1.3rem;
-  text-align: left;
-  width: 100%;
+font-size: 1.3rem;
+text-align: left;
+width: 100%;
 } */
 
 
