@@ -214,6 +214,7 @@ section.background>div.bg-2 {
 
 .stars-page h1 {
   font-size: 3rem;
+  margin-left: 0 !important;
 }
 
 .stars-page h2 {

@@ -6,10 +6,10 @@
 
 <body class="stars-page">
     <a href="{{ url_for('home') }}" class="back"><span class="material-icons">arrow_back</span>Retour</a>
-
-    <h2 class="first-sub-title"><span class="text-orange">Tweet Id de l'entreprise:</span> {{prediction.data[1]}}</h2>
-    <h2><span class="text-orange">Nous avons récupérer: </span>{{prediction.data[2]}} tweets</h2>
-    <h2><span class="text-orange">Note moyenne positif: </span>{{prediction.data[0]}} </h2>
+    <h2 class="first-sub-title"><span class="text-orange">RESUMÉ</span>
+    <h2><u>Tweet Id de l'entreprise:</u> {{prediction.data[1]}}</h2>
+    <h2><u>Nous avons récupérer: </u>{{prediction.data[2]}} tweets</h2>
+    <h2><u>Note moyenne positif:</u>{{prediction.data[0]}} </h2>
     <hr class="text-orange">
     <h2><span class="text-orange">TWEET</span></h2>
     <div class="tweet-container">
@@ -18,7 +18,8 @@
         {% endfor %}
     </div>
     <hr class="text-orange">
-    <img src="/plot.png" alt="my plot">
+    <h2 class="first-sub-title"><span class="text-orange">GRAPHIQUE</span>
+    <img src="/plot-sentiment-repartition.png" alt="my plot">
 </body>
 
 </html>
