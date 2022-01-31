@@ -72,7 +72,7 @@ def post_search():
     mean_note = df_tweets['sentiment'].mean()
 
 
-    return render_template('view.html', prediction=Analyse([mean_note, company_id]))
+    return render_template('view.html', prediction=Analyse([mean_note, company_id, len(df)]))
 
 def get_sentiment_analyse(sentence):
     model = keras.models.load_model('/Users/martinhurel/Desktop/tweet-sentiment-analyse/price_prediction_model.h5')
