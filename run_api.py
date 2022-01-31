@@ -68,7 +68,7 @@ class Analyse:
 def home():
     return render_template('index.html')
 
-@app.route('/plot.png')
+@app.route('/plot-sentiment-repartition.png')
 def plot_png():
     df = pd.read_csv('df_tweets.csv')
     positif = len(df[df['Sentiment'] > 0.5])
